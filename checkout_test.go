@@ -2,6 +2,12 @@ package main
 
 import "testing"
 
+func AssertResult(expectedResult int, actualResult int, t *testing.T) {
+	if expectedResult != actualResult {
+		t.Errorf("Expected %+v Got %+v", expectedResult, actualResult)
+	}
+}
+
 func TestGetTotalPrice(t *testing.T) {
 	var totalPrice = 0
 	items := []string{"A", "B", "C", "D"}
@@ -14,9 +20,7 @@ func TestGetTotalPrice(t *testing.T) {
 	expectedResult := 115
 	actualResult := totalPrice
 
-	if expectedResult != actualResult {
-		t.Errorf("Expected %+v Got %+v", expectedResult, actualResult)
-	}
+	AssertResult(expectedResult, actualResult, t)
 }
 
 func TestGetTotalPriceWithDiscountForA(t *testing.T) {
@@ -31,9 +35,8 @@ func TestGetTotalPriceWithDiscountForA(t *testing.T) {
 	expectedResult := 130
 	actualResult := totalPrice
 
-	if expectedResult != actualResult {
-		t.Errorf("Expected %+v Got %+v", expectedResult, actualResult)
-	}
+	AssertResult(expectedResult, actualResult, t)
+
 }
 
 func TestGetTotalPriceWithDiscountAB(t *testing.T) {
@@ -48,9 +51,7 @@ func TestGetTotalPriceWithDiscountAB(t *testing.T) {
 	expectedResult := 175
 	actualResult := totalPrice
 
-	if expectedResult != actualResult {
-		t.Errorf("Expected %+v Got %+v", expectedResult, actualResult)
-	}
+	AssertResult(expectedResult, actualResult, t)
 }
 
 func TestGetTotalPriceWithDiscountA4(t *testing.T) {
@@ -65,9 +66,7 @@ func TestGetTotalPriceWithDiscountA4(t *testing.T) {
 	expectedResult := 180
 	actualResult := totalPrice
 
-	if expectedResult != actualResult {
-		t.Errorf("Expected %+v Got %+v", expectedResult, actualResult)
-	}
+	AssertResult(expectedResult, actualResult, t)
 }
 
 func TestGetTotalPriceWithDiscountA4B3(t *testing.T) {
@@ -82,9 +81,7 @@ func TestGetTotalPriceWithDiscountA4B3(t *testing.T) {
 	expectedResult := 180 + 45 + 30
 	actualResult := totalPrice
 
-	if expectedResult != actualResult {
-		t.Errorf("Expected %+v Got %+v", expectedResult, actualResult)
-	}
+	AssertResult(expectedResult, actualResult, t)
 }
 
 func GetTotalPrice(sku string, quantity int) int {
