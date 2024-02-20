@@ -36,16 +36,33 @@ func TestGetTotalPriceWithDiscountForA(t *testing.T) {
 	}
 }
 
+func TestGetTotalPriceWithDiscountAB(t *testing.T) {
+	var totalPrice = 0
+	items := []string{"A", "A", "A", "B", "B"}
+
+	scanned := Scan(items) // get occurences
+	for item, quantity := range scanned {
+		totalPrice += GetTotalPrice(item, quantity)
+	}
+
+	expectedResult := 175
+	actualResult := totalPrice
+
+	if expectedResult != actualResult {
+		t.Errorf("Expected %+v Got %+v", expectedResult, actualResult)
+	}
+}
+
 func GetTotalPrice(sku string, quantity int) int {
 	if sku == "A" {
 		if quantity >= 3 {
-			return 130
+			return CalculateDiscount(quantity, 3, 130)
 		}
 		return 50 * quantity
 	}
 	if sku == "B" {
 		if quantity >= 2 {
-			return 45
+			return CalculateDiscount(quantity, 2, 45)
 		}
 		return 30 * quantity
 	}
@@ -64,4 +81,12 @@ func Scan(items []string) map[string]int {
 		dict[num] = dict[num] + 1
 	}
 	return dict
+}
+
+func CalculateDiscount(quantity int, multiplier int, specialPrice int) int {
+	price := 0
+	for i := 0; i < quantity; i += multiplier {
+		price += specialPrice
+	}
+	return price
 }
