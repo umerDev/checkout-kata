@@ -13,9 +13,7 @@ func TestGetTotalPrice(t *testing.T) {
 	items := []string{"A", "B", "C", "D"}
 
 	scanned := Scan(items) // get occurences
-	for item, quantity := range scanned {
-		totalPrice += GetTotalPrice(item, quantity)
-	}
+	totalPrice = GetTotalPrice(scanned)
 
 	expectedResult := 115
 	actualResult := totalPrice
@@ -28,9 +26,8 @@ func TestGetTotalPriceWithDiscountForA(t *testing.T) {
 	items := []string{"A", "A", "A"}
 
 	scanned := Scan(items) // get occurences
-	for item, quantity := range scanned {
-		totalPrice += GetTotalPrice(item, quantity)
-	}
+	totalPrice = GetTotalPrice(scanned)
+
 
 	expectedResult := 130
 	actualResult := totalPrice
@@ -44,9 +41,8 @@ func TestGetTotalPriceWithDiscountAB(t *testing.T) {
 	items := []string{"A", "A", "A", "B", "B"}
 
 	scanned := Scan(items) // get occurences
-	for item, quantity := range scanned {
-		totalPrice += GetTotalPrice(item, quantity)
-	}
+	totalPrice = GetTotalPrice(scanned)
+
 
 	expectedResult := 175
 	actualResult := totalPrice
@@ -59,9 +55,8 @@ func TestGetTotalPriceWithDiscountA4(t *testing.T) {
 	items := []string{"A", "A", "A", "A"}
 
 	scanned := Scan(items) // get occurences
-	for item, quantity := range scanned {
-		totalPrice += GetTotalPrice(item, quantity)
-	}
+	totalPrice = GetTotalPrice(scanned)
+
 
 	expectedResult := 180
 	actualResult := totalPrice
@@ -74,9 +69,8 @@ func TestGetTotalPriceWithDiscountA4B3(t *testing.T) {
 	items := []string{"A", "A", "A", "A", "B", "B", "B"}
 
 	scanned := Scan(items) // get occurences
-	for item, quantity := range scanned {
-		totalPrice += GetTotalPrice(item, quantity)
-	}
+	totalPrice = GetTotalPrice(scanned)
+
 
 	expectedResult := 180 + 45 + 30
 	actualResult := totalPrice
@@ -84,18 +78,20 @@ func TestGetTotalPriceWithDiscountA4B3(t *testing.T) {
 	AssertResult(expectedResult, actualResult, t)
 }
 
-func GetTotalPrice(sku string, quantity int) int {
+func GetTotalPrice(scanned map[string]int) int {
+	var totalPrice = 0
+	for item, quantity := range scanned {
+		totalPrice += GetPrice(item, quantity)
+	}
+	return totalPrice
+}
+
+func GetPrice(sku string, quantity int) int {
 	if sku == "A" {
-		if quantity >= 3 {
-			return CalculateDiscount(quantity, 3, 130, 50)
-		}
-		return 50 * quantity
+		return CalculateDiscount(quantity, 3, 130, 50)
 	}
 	if sku == "B" {
-		if quantity >= 2 {
-			return CalculateDiscount(quantity, 2, 45, 30)
-		}
-		return 30 * quantity
+		return CalculateDiscount(quantity, 2, 45, 30)
 	}
 	if sku == "C" {
 		return 20 * quantity
